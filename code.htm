@@ -1,0 +1,137 @@
+<!doctype html> 
+<html> 
+<head> 
+<title>BOLT</title>
+<script type="text/javascript" src="/serveFile?filename=bolt.js"> setDebug(true); </script>
+<style type="text/css">
+  
+  html{
+  background: url(http://drive.google.com/uc?export=view&id=1Pjpu0mzGFxdPuiRPKuFro5pTwyogeh2Q) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  }
+  body{
+    margin: 0px;
+    color: rgba(0,0,0,1);
+  }
+  #wel{
+    font-weight: bold;
+    font-size: 40px;
+  }
+  #io{
+    font-weight: bold;
+    font-size: 28px;
+  }
+  #contr{
+    font-weight: bold;
+    padding-top: 50px;
+  }
+  .mem{
+    display: flex;
+  }
+  .mem > div{
+    flex: 1;
+  }
+</style>
+<script>
+var r;
+function analogRead(pin,element_id) 
+{
+   var xmlhttp = new XMLHttpRequest();
+   xmlhttp.onreadystatechange = function() 
+   {
+     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) 
+     {
+	var obj = JSON.parse(xmlhttp.responseText);
+	if(obj.success=="1")
+        {
+		document.getElementById(element_id).innerHTML = "Pin Val = "+obj.value;
+                r=obj.value;
+					
+                                         
+	}
+	else
+        {
+		document.getElementById(element_id).innerHTML = "Error = "+xmlhttp.responseText;
+        }
+     } 
+   }
+           
+   xmlhttp.open("GET","/analogRead?pin="+pin,true);
+   xmlhttp.send();		
+}
+function fn()
+{
+var1=document.getElementById("ap").value;  
+window.location.href = "https://api.thingspeak.com/update?api_key=LTEEDG02VOJ8O24I&field1="+r;
+}
+</script>
+</head> 
+<body> 
+<div class="container">
+
+      <div style=" text-align: center;">
+            <div id="wel">
+                  WELCOME
+            </div >
+            <div style="font-style: italic; font-size: 28px;">
+              <marquee>
+                This is the interface between Bolt IoT & ThingSpeak
+              </marquee>
+            </div>
+            <div id="io">
+                  __Automation using IoT__
+            </div>
+      </div>
+
+
+      <div class="mem">
+            <div id="credit1" style="padding-left: 40px;">
+                  <div id="contr" >
+                        MADE BY
+                  </div>
+                  <div id="stud">
+                          <div >
+                                Karri Srinivasa Mani Sankar Reddy
+                          </div>
+                          <div >
+                                Tarun Shankar Narain
+                          </div>
+                          <div >
+                                Suraj Kumar Verma
+                          </div>
+                  </div>
+            </div>
+            <div id="credit2" style="max-width: 20%; float:right;">
+                  <div id="contr" >
+                        GUIDED BY
+                  </div>
+                  <div id="stud">
+                        Sumit Kumar Gupta
+                  </div>
+            </div>
+      </div>
+
+
+      <div class="api" style="text-align:center; padding: 20px;">
+            API KEY:<input type="text" name="api" id="ap">
+      </div>
+
+
+      <div style="text-align: center;">
+            <div style="display: inline-block;">
+                  <button onclick="analogRead(A0,'output')">Take Reading</button>
+            </div>
+            <div style="display: inline-block;">
+                  <button onclick="fn()">Pass Reading to thingspeak</button>
+            </div>
+            <div>
+                  <span id="output"></span>
+            </div>
+      </div>
+</div>
+
+</body> 
+</html>
